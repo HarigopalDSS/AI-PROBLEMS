@@ -1,0 +1,59 @@
+def astar(graph, start, goal, heuristic):
+    open_list = [start]
+    closed_list = []
+    
+    g = {node: float('inf') for node in graph}
+    g[start] = 0
+    
+    parent = {start: None}
+
+    while open_list:
+        # Find node with lowest f = g + h
+        current = open_list[0]
+        for node in open_list:
+            if g[node] + heuristic[node] < g[current] + heuristic[current]:
+                current = node
+
+        # Goal reached
+        if current == goal:
+            path = []
+            while current:
+                path.append(current)
+                current = parent[current]
+            path.reverse()
+            return path
+
+        open_list.remove(current)
+        closed_list.append(current)
+
+        # Check neighbors
+        for neighbor, cost in graph[current].items():
+            if neighbor in closed_list:
+                continue
+
+            new_g = g[current] + cost
+
+            if neighbor not in open_list:
+                open_list.append(neighbor)
+            elif new_g >= g[neighbor]:
+                continue
+
+            g[neighbor] = new_g
+            parent[neighbor] = current
+
+    return "No Path Found"
+
+# Example Graph (Road Network)
+graph = {
+    'A': {'B': 1, 'C': 4},
+    'B': {'D': 2},
+    'C': {'D': 1},
+    'D': {}
+}
+
+# Heuristic (estimated distance to goal)
+heuristic = {'A': 3, 'B': 2, 'C': 1, 'D': 0}
+
+# Run
+path = astar(graph, 'A', 'D', heuristic)
+print("Shortest Path:", path)
