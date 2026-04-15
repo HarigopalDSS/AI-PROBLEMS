@@ -1,0 +1,63 @@
+import random
+
+def print_board(board):
+    print("\n")
+    for i in range(0, 9, 3):
+        print(board[i], "|", board[i+1], "|", board[i+2])
+    print("\n")
+
+def check_win(board, p):
+    wins = [(0,1,2),(3,4,5),(6,7,8),
+            (0,3,6),(1,4,7),(2,5,8),
+            (0,4,8),(2,4,6)]
+    return any(board[a]==board[b]==board[c]==p for a,b,c in wins)
+
+def play_game():
+    board = [" "] * 9
+
+    for turn in range(9):
+        print_board(board)
+
+        #  USER TURN
+        if turn % 2 == 0:
+            try:
+                pos = int(input("Enter position (0-8): "))
+            except:
+                print("Invalid input!")
+                continue
+
+            if pos < 0 or pos > 8 or board[pos] != " ":
+                print("Invalid move! Try again.")
+                continue
+
+            board[pos] = "X"
+
+        #  COMPUTER TURN
+        else:
+            print("Computer is thinking...")
+            empty = [i for i in range(9) if board[i] == " "]
+            pos = random.choice(empty)
+            board[pos] = "O"
+            print("Computer chose position:", pos)
+
+        #  Check win
+        player = "X" if turn % 2 == 0 else "O"
+        if check_win(board, player):
+            print_board(board)
+            if player == "X":
+                print(" You win!")
+            else:
+                print(" Computer wins!")
+            return
+
+    #  Draw
+    print_board(board)
+    print("It's a Draw!")
+
+#  Play again loop
+while True:
+    play_game()
+    again = input("Play again? (yes/no): ").lower()
+    if again != "yes":
+        print("Game Over")
+        break
