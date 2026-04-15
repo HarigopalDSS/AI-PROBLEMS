@@ -1,0 +1,87 @@
+import json
+import os
+
+file_name = "data.json"
+
+# Create file if not exists
+if not os.path.exists(file_name):
+    with open(file_name, "w") as f:
+        json.dump([], f)
+
+while True:
+    print("\n===== MENU =====")
+    print("1. Add Data")
+    print("2. View Data")
+    print("3. Update Data")
+    print("4. Delete Data")
+    print("5. Exit")
+
+    choice = input("Enter choice: ")
+
+    # READ existing data
+    with open(file_name, "r") as f:
+        data = json.load(f)
+
+    # CREATE
+    if choice == "1":
+        id = int(input("Enter ID: "))
+        name = input("Enter Name: ")
+
+        data.append({"id": id, "name": name})
+
+        with open(file_name, "w") as f:
+            json.dump(data, f, indent=4)
+
+        print("✅ Data Added")
+
+    # READ
+    elif choice == "2":
+        print("\n--- Data ---")
+        for i in data:
+            print(i)
+
+    # UPDATE
+    elif choice == "3":
+        id = int(input("Enter ID to update: "))
+        found = False
+
+        for i in data:
+            if i["id"] == id:
+                new_name = input("Enter new name: ")
+                i["name"] = new_name
+                found = True
+                break
+
+        if found:
+            with open(file_name, "w") as f:
+                json.dump(data, f, indent=4)
+            print("✅ Data Updated")
+        else:
+            print("❌ ID not found")
+
+    # DELETE
+    elif choice == "4":
+        id = int(input("Enter ID to delete: "))
+        new_data = []
+        found = False
+
+        for i in data:
+            if i["id"] != id:
+                new_data.append(i)
+            else:
+                found = True
+
+        if found:
+            with open(file_name, "w") as f:
+                json.dump(new_data, f, indent=4)
+            print("✅ Data Deleted")
+        else:
+            print("❌ ID not found")
+
+    # EXIT
+    elif choice == "5":
+        print("Exiting program...")
+        break
+
+    else:
+        print("❌ Invalid choice")
