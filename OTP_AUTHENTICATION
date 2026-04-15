@@ -1,0 +1,78 @@
+import random
+import time
+
+class OTPSystem:
+    def __init__(self):
+        self.otp = None
+        self.expiry_time = None
+        self.attempts_left = 3
+        self.resend_count = 0
+        self.max_resend = 3
+        self.blocked = False
+
+    def generate_otp(self):
+        self.otp = str(random.randint(100000, 999999))
+        self.expiry_time = time.time() + 30
+        print("OTP sent to user (simulation):", self.otp)
+
+    def resend_otp(self):
+        if self.resend_count >= self.max_resend:
+            print("Resend limit reached")
+            return
+
+        self.resend_count += 1
+        self.attempts_left = 3
+        self.generate_otp()
+        print("Resend attempts used:", self.resend_count)
+
+    def verify_otp(self, user_input):
+        if self.blocked:
+            print("User is blocked")
+            return True
+
+        if time.time() > self.expiry_time:
+            print("OTP expired")
+            return False
+
+        if not user_input:
+            print("OTP cannot be empty")
+            return False
+
+        if not user_input.isdigit():
+            print("Invalid OTP format")
+            return False
+
+        if user_input == self.otp:
+            print("Authentication successful")
+            return True
+
+        self.attempts_left -= 1
+        print("Incorrect OTP. Attempts left:", self.attempts_left)
+
+        if self.attempts_left == 0:
+            self.blocked = True
+            print("User blocked due to multiple failed attempts")
+            return True
+
+        return False
+
+
+def run_system():
+    system = OTPSystem()
+    system.generate_otp()
+
+    while True:
+        user_input = input("Enter OTP or type RESEND: ").strip()
+
+        if user_input.lower() == "resend":
+            system.resend_otp()
+            continue
+
+        result = system.verify_otp(user_input)
+
+        if result:
+            break
+
+
+# Run
+run_system()
