@@ -1,0 +1,37 @@
+def traffic_light(cars, emergency=False, night=False):
+    if cars < 0:
+        return "INVALID INPUT"
+
+    if emergency:
+        return "GREEN (Emergency 🚑)"
+
+    if night:
+        if cars == 0:
+            return "RED (No Traffic 🌙)"
+        else:
+            return "YELLOW (Night Mode 🌙)"
+
+    if cars > 20:
+        return "GREEN (Heavy Traffic)"
+    elif 10 < cars <= 20:
+        return "YELLOW (Moderate Traffic)"
+    elif 1 <= cars <= 10:
+        return "RED (Low Traffic)"
+    else:
+        return "RED (No Vehicles)"
+
+
+# 🚀 Real-world scenarios execution
+print("🚦 Smart Traffic System Output\n")
+
+print("High Traffic:", traffic_light(25))
+print("Moderate Traffic:", traffic_light(15))
+print("Low Traffic:", traffic_light(5))
+print("No Traffic:", traffic_light(0))
+
+print("\nEmergency Case:", traffic_light(5, emergency=True))
+
+print("\nNight - No Traffic:", traffic_light(0, night=True))
+print("Night - With Traffic:", traffic_light(8, night=True))
+
+print("\nInvalid Input:", traffic_light(-3))
