@@ -1,0 +1,25 @@
+def warehouse_robot():
+    robot_pos = "entrance"
+    item_pos = "shelf"
+    box_pos = "corner"
+    has_item = False
+
+    print("Robot is at", robot_pos)
+
+    # Step 1: Move to box
+    robot_pos = box_pos
+    print("Robot moved to box at", box_pos)
+
+    # Step 2: Push box to shelf
+    box_pos = item_pos
+    robot_pos = item_pos
+    print("Robot pushed box to", item_pos)
+
+    # Step 3: Climb box
+    print("Robot climbed the box")
+
+    # Step 4: Pick item
+    has_item = True
+    print("Robot picked the item:", has_item)
+
+warehouse_robot()
