@@ -1,0 +1,19 @@
+resources = [10, 5, 7]   # Server capacities (GB RAM)
+tasks = [3, 4, 6, 2]     # Application requirements (GB)
+
+allocation = []
+
+for t in tasks:
+    allocated = False
+    for i in range(len(resources)):
+        if resources[i] >= t:
+            allocation.append((t, i))  # (task, server)
+            resources[i] -= t
+            allocated = True
+            break
+    
+    if not allocated:
+        allocation.append((t, "Not Allocated"))
+
+print("Task Allocation (Task -> Server):", allocation)
+print("Remaining Resources:", resources)
