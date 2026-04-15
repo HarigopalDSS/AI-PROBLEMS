@@ -1,0 +1,89 @@
+def knapsack(weights, values, capacity, items):
+    n = len(values)
+    dp = [[0]*(capacity+1) for _ in range(n+1)]
+
+    # Build DP table
+    for i in range(1, n+1):
+        for w in range(capacity+1):
+            if weights[i-1] <= w:
+                dp[i][w] = max(dp[i-1][w],
+                               values[i-1] + dp[i-1][w-weights[i-1]])
+            else:
+                dp[i][w] = dp[i-1][w]
+
+    # 🔍 Find selected items
+    w = capacity
+    selected = []
+
+    for i in range(n, 0, -1):
+        if dp[i][w] != dp[i-1][w]:
+            selected.append(items[i-1])
+            w -= weights[i-1]
+
+    selected.reverse()
+
+    return dp[n][capacity], selected
+
+
+# 🧪 TEST CASES (REAL WORLD)
+
+# 🛒 1. Shopping Scenario
+items = ["Shoes", "Shirt", "Watch"]
+weights = [2, 3, 4]
+values = [40, 50, 60]
+capacity = 5
+
+max_val, selected = knapsack(weights, values, capacity, items)
+print("🛒 Shopping Scenario")
+print("Selected Items:", selected)
+print("Max Value:", max_val)
+
+
+# 🎒 2. Backpack Scenario
+items = ["Laptop", "Books", "Bottle"]
+weights = [3, 2, 1]
+values = [100, 40, 20]
+capacity = 4
+
+max_val, selected = knapsack(weights, values, capacity, items)
+print("\n🎒 Backpack Scenario")
+print("Selected Items:", selected)
+print("Max Value:", max_val)
+
+
+# 🚚 3. Truck Loading Scenario
+items = ["TV", "Fridge", "Microwave"]
+weights = [5, 4, 2]
+values = [100, 80, 50]
+capacity = 6
+
+max_val, selected = knapsack(weights, values, capacity, items)
+print("\n🚚 Truck Loading Scenario")
+print("Selected Items:", selected)
+print("Max Value:", max_val)
+
+
+# 👤 4. USER INPUT VERSION
+print("\n--- Custom Input ---")
+n = int(input("Enter number of items: "))
+
+items = []
+weights = []
+values = []
+
+for i in range(n):
+    name = input(f"Enter item {i+1} name: ")
+    w = int(input(f"Enter weight of {name}: "))
+    v = int(input(f"Enter value of {name}: "))
+    
+    items.append(name)
+    weights.append(w)
+    values.append(v)
+
+capacity = int(input("Enter capacity: "))
+
+max_val, selected = knapsack(weights, values, capacity, items)
+
+print("\n✅ Result")
+print("Selected Items:", selected)
+print("Max Value:", max_val)
