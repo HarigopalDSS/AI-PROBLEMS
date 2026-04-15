@@ -1,0 +1,39 @@
+
+graph = {
+    'A': {'B': 1, 'C': 4},
+    'B': {'C': 2, 'D': 5},
+    'C': {'D': 1},
+    'D': {}
+}
+
+def dijkstra(start):
+    # Step 1: Set all distances to infinity
+    dist = {}
+    for node in graph:
+        dist[node] = float('inf')
+
+    dist[start] = 0   # distance to start = 0
+    visited = set()
+
+    # Step 2: Loop through all nodes
+    while len(visited) < len(graph):
+        # Find node with minimum distance
+        min_node = None
+        for node in graph:
+            if node not in visited:
+                if min_node is None or dist[node] < dist[min_node]:
+                    min_node = node
+
+        # Mark node as visited
+        visited.add(min_node)
+
+        # Step 3: Update neighbors
+        for neighbor in graph[min_node]:
+            new_dist = dist[min_node] + graph[min_node][neighbor]
+            if new_dist < dist[neighbor]:
+                dist[neighbor] = new_dist
+
+    return dist
+
+# Run
+print(dijkstra('A'))
